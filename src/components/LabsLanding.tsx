@@ -36,6 +36,7 @@ export function LabsLanding() {
         <section aria-label="Projects" className="labs-enter-delay">
           <ul className="m-0 list-none p-0">
             {projects.map((project) => {
+              const isDownload = Boolean(project.href?.endsWith(".zip"));
               const content = (
                 <>
                   <div className="flex items-baseline justify-between gap-4">
@@ -64,8 +65,9 @@ export function LabsLanding() {
                   {project.href ? (
                     <a
                       href={project.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      {...(isDownload
+                        ? { download: true }
+                        : { target: "_blank", rel: "noopener noreferrer" })}
                       className="labs-project block px-1 py-7 no-underline sm:px-2"
                     >
                       {content}

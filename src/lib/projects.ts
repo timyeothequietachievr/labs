@@ -17,9 +17,11 @@ export const projects: Project[] = [
   },
   {
     name: "Annotator",
-    platform: "Chrome extension",
+    platform: "Chrome extension · Beta",
     description:
-      "Highlight text on any page, tag feedback, add comments, and capture short audio notes. Personal and local — not in the Chrome Web Store.",
+      "Highlight text on any page, tag feedback, add comments, capture short audio notes, and share a read-receipt snapshot. Beta install: download the zip, unzip it, then Load unpacked in Chrome Developer mode.",
+    href: "/downloads/annotator-beta.zip",
+    hrefLabel: "Download beta (zip)",
   },
   {
     name: "Rain Radar",
