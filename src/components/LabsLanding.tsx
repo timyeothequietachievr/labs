@@ -67,7 +67,9 @@ export function LabsLanding() {
                       href={project.href}
                       {...(isDownload
                         ? { download: true }
-                        : { target: "_blank", rel: "noopener noreferrer" })}
+                        : project.href.startsWith("/")
+                          ? {}
+                          : { target: "_blank", rel: "noopener noreferrer" })}
                       className="labs-project block px-1 py-7 no-underline sm:px-2"
                     >
                       {content}

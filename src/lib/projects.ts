@@ -8,6 +8,14 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Meeting Planner",
+    platform: "Web app",
+    description:
+      "Cross-timezone meeting finder with Sydney as master city (changeable), row highlight, and daylight-saving change callouts.",
+    href: "https://meetingdatetime.thequietachievr.com",
+    hrefLabel: "meetingdatetime.thequietachievr.com",
+  },
+  {
     name: "Wheel of Names",
     platform: "Web app",
     description:
