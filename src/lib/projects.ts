@@ -8,6 +8,14 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Web Job Search",
+    platform: "Web app · Coach",
+    description:
+      "Multi-client job radar for Quiet Achiever coaching — discover roles, score every client, allocate into Notion Opportunities.",
+    href: "/job-search",
+    hrefLabel: "Open Web Job Search",
+  },
+  {
     name: "Meeting Planner",
     platform: "Web app",
     description:
