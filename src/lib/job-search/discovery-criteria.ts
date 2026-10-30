@@ -64,9 +64,10 @@ export async function buildDiscoveryCriteria() {
     compositeBrief,
     instructions: [
       "Run ONE shared discovery crawl covering the union above — not a separate crawl per client.",
-      "Scan every source in `sources` (TrueUp, LinkedIn public/alerts, Slack job boards, LinkedIn person feeds).",
-      "For Slack channels: read recent posts, extract job openings that match the title/geo union, set source to the channel label (e.g. leadingdesign_jobs_leadership).",
-      "For linkedin_person_feed sources (e.g. Jonathan Coleman): scan recent public posts for shared job openings — especially content designer / content writer — set source to linkedin_jcolman.",
+      "Scan every source in `sources` (job boards, Slack channels, LinkedIn person feeds).",
+      "If a source has loginHint and you are not signed in: report that workspace/site, skip only that source, continue the run.",
+      "For Slack channels: read recent posts, extract job openings that match the title/geo union, set `source` to the source id.",
+      "For linkedin_person_feed sources (e.g. Jonathan Coleman): scan recent public posts for shared openings — especially content designer / writer — set source to linkedin_jcolman.",
       "LinkedIn only without Tim Yeo’s LinkedIn login.",
       "After the crawl, POST the JSON payload to /api/job-search/ingest with Authorization: Bearer <JOB_SEARCH_INGEST_TOKEN>.",
       "Do not Allocate to Notion; the coach reviews matches in Web Job Search.",
