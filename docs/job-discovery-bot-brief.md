@@ -93,13 +93,14 @@ Prefer the live list from `GET /api/job-search/discovery-criteria` → `sources`
 
 1. TrueUp  
 2. LinkedIn jobs without Tim’s login (public / alerts)  
-3. **Leading Design Slack** (job boards — scan recent posts each run):
-   - `#jobs-leadership` — https://leadingdesign.slack.com/archives/C4G08N8DN (`C4G08N8DN`)
-   - `#jobs-ic` — https://leadingdesign.slack.com/archives/CT8EQSMD3 (`CT8EQSMD3`)
+3. **Slack job boards** (scan recent posts each run — each community is its own workspace):
+   - Leading Design `#jobs-leadership` — https://leadingdesign.slack.com/archives/C4G08N8DN (`C4G08N8DN`)
+   - Leading Design `#jobs-ic` — https://leadingdesign.slack.com/archives/CT8EQSMD3 (`CT8EQSMD3`)
+   - Aussie Designers `#jobs` — https://aussiedesigners.slack.com/archives/C2B39S1K3 (`C2B39S1K3`)
 4. Company career sites / ATS when Tim provides targets  
 5. Manual URLs Tim pastes  
 
-For Slack posts: extract title, company, location, link, and a short JD/snippet. Set `source` to `leadingdesign_jobs_leadership` or `leadingdesign_jobs_ic`. Skip discussion-only threads with no open role.
+For Slack posts: extract title, company, location, link, and a short JD/snippet. Set `source` to `leadingdesign_jobs_leadership`, `leadingdesign_jobs_ic`, or `aussiedesigners_jobs`. Skip discussion-only threads with no open role.
 
 ## Output — JSON body for POST /api/job-search/ingest
 
@@ -116,7 +117,7 @@ For Slack posts: extract title, company, location, link, and a short JD/snippet.
       "url": "",
       "snippet_or_jd": "",
       "posted_at": "",
-      "source": "trueup | linkedin_public | linkedin_alert | leadingdesign_jobs_leadership | leadingdesign_jobs_ic | career_site | manual | other",
+      "source": "trueup | linkedin_public | linkedin_alert | leadingdesign_jobs_leadership | leadingdesign_jobs_ic | aussiedesigners_jobs | career_site | manual | other",
       "external_id": ""
     }
   ]

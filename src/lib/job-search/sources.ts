@@ -1,6 +1,7 @@
 /**
  * Standing discovery sources for Job Discovery Bot / shared crawl.
- * Channel IDs are Leading Design Slack (workspace already linked in Cursor).
+ * Slack channel IDs span multiple workspaces — Cursor MCP is one workspace at a time;
+ * Job Discovery Bot needs its own Slack access to each community.
  */
 export type JobDiscoverySource = {
   id: string;
@@ -49,6 +50,16 @@ export const JOB_DISCOVERY_SOURCES: JobDiscoverySource[] = [
     url: "https://leadingdesign.slack.com/archives/CT8EQSMD3",
     priority: 3,
     notes: "IC Staff/Principal/Lead design roles.",
+  },
+  {
+    id: "aussiedesigners-jobs",
+    kind: "slack_channel",
+    label: "#jobs",
+    community: "Aussie Designers",
+    channelId: "C2B39S1K3",
+    url: "https://aussiedesigners.slack.com/archives/C2B39S1K3",
+    priority: 3,
+    notes: "AU design roles. Separate Slack workspace from Leading Design.",
   },
 ];
 
