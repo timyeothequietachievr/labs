@@ -10,9 +10,39 @@ import {
 import { requireCoachPage } from "@/lib/job-search/guard";
 import { listClients } from "@/lib/job-search/store";
 
-export default async function ClientsPage() {
+type StatusFilter = "all" | "active" | "paused";
+
+const SEGMENTS: { id: StatusFilter; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "active", label: "Active" },
+  { id: "paused", label: "Paused" },
+];
+
+function parseFilter(raw: string | string[] | undefined): StatusFilter {
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  if (value === "active" || value === "paused" || value === "all") return value;
+  return "all";
+}
+
+export default async function ClientsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string | string[] }>;
+}) {
   const session = await requireCoachPage();
+  const params = await searchParams;
+  const filter = parseFilter(params.status);
   const clients = await listClients();
+  const filtered =
+    filter === "all"
+      ? clients
+      : clients.filter((c) => c.status === filter);
+
+  const counts = {
+    all: clients.length,
+    active: clients.filter((c) => c.status === "active").length,
+    paused: clients.filter((c) => c.status === "paused").length,
+  };
 
   return (
     <JobSearchShell email={session.email}>
@@ -30,16 +60,53 @@ export default async function ClientsPage() {
           <JsButton href="/job-search/clients/new">Add client</JsButton>
         </div>
 
-        <ul className="mt-8 space-y-3">
-          {clients.length === 0 ? (
+        <div
+          className="mt-6 inline-flex rounded-[6px] border border-warm-200 bg-paper-soft/80 p-1"
+          role="tablist"
+          aria-label="Filter clients by status"
+        >
+          {SEGMENTS.map((seg) => {
+            const selected = filter === seg.id;
+            return (
+              <Link
+                key={seg.id}
+                href={
+                  seg.id === "all"
+                    ? "/job-search/clients"
+                    : `/job-search/clients?status=${seg.id}`
+                }
+                role="tab"
+                aria-selected={selected}
+                className={`rounded-[4px] px-3.5 py-1.5 text-sm font-semibold no-underline transition-colors ${
+                  selected
+                    ? "bg-charcoal text-paper"
+                    : "text-warm-700 hover:text-charcoal"
+                }`}
+              >
+                {seg.label}
+                <span
+                  className={`ml-1.5 text-xs font-medium ${
+                    selected ? "text-paper/70" : "text-warm-500"
+                  }`}
+                >
+                  {counts[seg.id]}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+
+        <ul className="mt-6 space-y-3">
+          {filtered.length === 0 ? (
             <JsCard>
               <p className="font-reading text-sm text-warm-700">
-                No clients yet. Start with Alan Ong (or any active coaching
-                client) and link their Notion Opportunities collection id.
+                {filter === "all"
+                  ? "No clients yet. Add an active coaching client and link their Notion Opportunities database."
+                  : `No ${filter} clients.`}
               </p>
             </JsCard>
           ) : (
-            clients.map((client) => (
+            filtered.map((client) => (
               <li key={client.id}>
                 <Link
                   href={`/job-search/clients/${client.id}`}
@@ -61,11 +128,15 @@ export default async function ClientsPage() {
                           </JsBadge>
                         </div>
                         <p className="mt-2 text-sm text-warm-700">
-                          {client.preferences.targetTitles.slice(0, 4).join(" · ") ||
-                            "No target titles yet"}
+                          {client.preferences.targetTitles
+                            .slice(0, 4)
+                            .join(" · ") || "No target titles yet"}
                         </p>
                         <p className="mt-1 text-xs text-warm-500">
-                          {[...client.preferences.countries, ...client.preferences.locations]
+                          {[
+                            ...client.preferences.countries,
+                            ...client.preferences.locations,
+                          ]
                             .slice(0, 6)
                             .join(" · ") || "Geos not set"}
                         </p>
