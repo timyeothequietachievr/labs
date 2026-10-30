@@ -64,7 +64,12 @@ export default async function ClientDetailPage({
   return (
     <JobSearchShell email={session.email}>
       <JsContainer className="max-w-6xl">
-        <JsEyebrow>Client</JsEyebrow>
+        <Link
+          href="/job-search/clients"
+          className="eyebrow inline-flex items-center gap-1.5 text-warm-500 no-underline transition-colors hover:text-ember"
+        >
+          <span aria-hidden>←</span> Clients
+        </Link>
         <h1 className="display-headline mt-2 text-4xl text-charcoal">
           {client.name}
         </h1>
