@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { COUNTRY_OPTIONS, LOCATION_OPTIONS } from "@/lib/job-search/geo-options";
 import type { Client } from "@/lib/job-search/types";
+import { MultiSelect } from "./MultiSelect";
 import { Field, JsButton, inputClass, textareaClass } from "./ui";
 
 function joinList(values: string[]) {
@@ -175,31 +177,33 @@ export function ClientForm({ client }: { client?: Client }) {
         />
       </Field>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Countries">
-          <textarea
-            className={textareaClass}
-            name="countries"
-            defaultValue={joinList(p?.countries ?? [])}
-          />
-        </Field>
-        <Field label="Cities / locations">
-          <textarea
-            className={textareaClass}
-            name="locations"
-            defaultValue={joinList(p?.locations ?? [])}
-          />
-        </Field>
-      </div>
+      <Field label="Countries" hint="Multi-select — click a chip to remove">
+        <MultiSelect
+          name="countries"
+          options={COUNTRY_OPTIONS}
+          defaultSelected={p?.countries ?? []}
+          placeholder="Add countries…"
+        />
+      </Field>
+
+      <Field label="Cities / locations">
+        <MultiSelect
+          name="locations"
+          options={LOCATION_OPTIONS}
+          defaultSelected={p?.locations ?? []}
+          placeholder="Add cities or locations…"
+        />
+      </Field>
 
       <Field
         label="Remote countries allowed"
         hint="When a role is remote, which countries are acceptable"
       >
-        <textarea
-          className={textareaClass}
+        <MultiSelect
           name="remoteCountriesAllowed"
-          defaultValue={joinList(p?.remoteCountriesAllowed ?? [])}
+          options={COUNTRY_OPTIONS}
+          defaultSelected={p?.remoteCountriesAllowed ?? []}
+          placeholder="Add remote-allowed countries…"
         />
       </Field>
 

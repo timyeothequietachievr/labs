@@ -6,12 +6,18 @@ import {
   JsContainer,
   JsEyebrow,
 } from "@/components/job-search/ui";
+import {
+  formatJobSource,
+  formatListedDate,
+  isSmokeTestJob,
+} from "@/lib/job-search/format";
 import { requireCoachPage } from "@/lib/job-search/guard";
 import { listJobs, listMatches } from "@/lib/job-search/store";
 
 export default async function JobsPage() {
   const session = await requireCoachPage();
-  const [jobs, matches] = await Promise.all([listJobs(), listMatches()]);
+  const [allJobs, matches] = await Promise.all([listJobs(), listMatches()]);
+  const jobs = allJobs.filter((j) => !isSmokeTestJob(j));
 
   return (
     <JobSearchShell email={session.email}>
@@ -47,7 +53,7 @@ export default async function JobsPage() {
                         <div>
                           <div className="flex flex-wrap gap-2">
                             <JsBadge tone="ink">{job.availability}</JsBadge>
-                            <JsBadge>{job.sources[0]?.source ?? "unknown"}</JsBadge>
+                            <JsBadge>{formatJobSource(job)}</JsBadge>
                             {reviewFirst > 0 ? (
                               <JsBadge tone="ember">
                                 {reviewFirst} review first
@@ -58,6 +64,7 @@ export default async function JobsPage() {
                             {job.title} · {job.employer}
                           </h2>
                           <p className="mt-1 text-sm text-warm-700">
+                            Listed {formatListedDate(job)} ·{" "}
                             {job.location || "Location unknown"} ·{" "}
                             {job.arrangement} · {related.length} client matches
                           </p>

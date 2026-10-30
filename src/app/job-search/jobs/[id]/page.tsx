@@ -7,6 +7,10 @@ import {
   JsContainer,
   JsEyebrow,
 } from "@/components/job-search/ui";
+import {
+  formatJobSource,
+  formatListedDate,
+} from "@/lib/job-search/format";
 import { requireCoachPage } from "@/lib/job-search/guard";
 import { getClient, getJob, listMatches } from "@/lib/job-search/store";
 
@@ -41,32 +45,36 @@ export default async function JobDetailPage({
           {job.employer}
           {job.location ? ` · ${job.location}` : ""} · {job.arrangement}
         </p>
+        <p className="mt-2 text-sm text-warm-500">
+          Listed {formatListedDate(job)} · Source {formatJobSource(job)}
+        </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <JsBadge tone="ink">{job.availability}</JsBadge>
           {job.sources.map((s, i) => (
             <JsBadge key={`${s.source}-${i}`}>{s.source}</JsBadge>
           ))}
         </div>
-        {job.canonicalUrl ? (
-          <p className="mt-3 text-sm">
-            <a
-              href={job.canonicalUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold text-ember"
-            >
-              Open original posting →
-            </a>
-          </p>
-        ) : null}
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <JsCard>
-            <h2 className="font-display text-xl text-charcoal">
-              Job description
-            </h2>
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h2 className="font-display text-xl text-charcoal">
+                Job description
+              </h2>
+              {job.canonicalUrl ? (
+                <a
+                  href={job.canonicalUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm font-semibold text-ember"
+                >
+                  Open original posting →
+                </a>
+              ) : null}
+            </div>
             <pre className="mt-4 whitespace-pre-wrap font-reading text-sm leading-relaxed text-warm-700">
-              {job.jdText}
+              {job.jdText?.trim() ||
+                "No job description stored yet. Re-ingest with a posting URL, or paste via Import."}
             </pre>
           </JsCard>
 

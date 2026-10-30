@@ -1,9 +1,12 @@
+import { fetchJobDescriptionText, shouldEnrichJd } from "./enrich-jd";
+import { isSmokeTestJob } from "./format";
 import { assessJobAgainstClients } from "./matching";
 import {
   createRun,
   finishRun,
   listClients,
   listMatches,
+  updateJobJd,
   upsertJob,
   upsertMatch,
 } from "./store";
@@ -64,6 +67,19 @@ export async function ingestDiscoveryJobs(input: {
         );
         continue;
       }
+      if (isSmokeTestJob({ title, employer })) {
+        skipped.push(`${title} @ ${employer} (smoke test skipped)`);
+        continue;
+      }
+
+      const canonicalUrl = String(raw.url ?? raw.canonicalUrl ?? "").trim();
+      let resolvedJd = jdText;
+      if (shouldEnrichJd(resolvedJd) && canonicalUrl) {
+        const fetched = await fetchJobDescriptionText(canonicalUrl);
+        if (fetched && fetched.length > resolvedJd.length) {
+          resolvedJd = fetched;
+        }
+      }
 
       const arrangementParse = WorkArrangement.safeParse(raw.arrangement);
       const { job, created } = await upsertJob({
@@ -73,16 +89,25 @@ export async function ingestDiscoveryJobs(input: {
         arrangement: arrangementParse.success
           ? arrangementParse.data
           : "unknown",
-        canonicalUrl: String(raw.url ?? raw.canonicalUrl ?? ""),
+        canonicalUrl,
         externalRequisitionId: String(
           raw.external_id ?? raw.externalRequisitionId ?? "",
         ),
-        jdText,
+        jdText: resolvedJd,
         source: String(raw.source ?? "discovery"),
-        sourceUrl: String(raw.url ?? raw.canonicalUrl ?? ""),
+        sourceUrl: canonicalUrl,
         postingDate: raw.posted_at ?? raw.postingDate ?? null,
       });
       if (created) jobsNew += 1;
+
+      // If upsert kept a short JD, upgrade when we fetched a longer one
+      if (
+        shouldEnrichJd(job.jdText) &&
+        resolvedJd.length > job.jdText.trim().length
+      ) {
+        await updateJobJd(job.id, resolvedJd);
+        job.jdText = resolvedJd;
+      }
 
       const priorMatches = await listMatches({ jobId: job.id });
       const assessments = await assessJobAgainstClients(

@@ -605,3 +605,23 @@ export async function dashboardStats() {
     lastRun: runs[0] ?? null,
   };
 }
+
+export async function updateJobJd(jobId: string, jdText: string) {
+  const { data, error } = await getSupabase()
+    .from("js_jobs")
+    .update({
+      jd_text: jdText,
+      content_hash: hashJd(jdText),
+      updated_at: nowIso(),
+    })
+    .eq("id", jobId)
+    .select("*")
+    .single();
+  if (error) throw error;
+  return mapJob(data as JobRow);
+}
+
+export async function deleteJob(jobId: string) {
+  const { error } = await getSupabase().from("js_jobs").delete().eq("id", jobId);
+  if (error) throw error;
+}

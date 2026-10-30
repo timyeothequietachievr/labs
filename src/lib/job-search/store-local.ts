@@ -407,3 +407,25 @@ export async function dashboardStats() {
     lastRun: store.runs[0] ?? null,
   };
 }
+
+export async function updateJobJd(jobId: string, jdText: string) {
+  const store = await readStore();
+  const idx = store.jobs.findIndex((j) => j.id === jobId);
+  if (idx === -1) throw new Error("Job not found");
+  const ts = nowIso();
+  store.jobs[idx] = {
+    ...store.jobs[idx],
+    jdText,
+    contentHash: hashJd(jdText),
+    updatedAt: ts,
+  };
+  await writeStore(store);
+  return store.jobs[idx];
+}
+
+export async function deleteJob(jobId: string) {
+  const store = await readStore();
+  store.jobs = store.jobs.filter((j) => j.id !== jobId);
+  store.matches = store.matches.filter((m) => m.jobId !== jobId);
+  await writeStore(store);
+}

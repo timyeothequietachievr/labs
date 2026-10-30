@@ -68,3 +68,11 @@ export async function listRuns() {
 export async function dashboardStats() {
   return api().dashboardStats();
 }
+
+export async function updateJobJd(...args: Parameters<typeof local.updateJobJd>) {
+  return api().updateJobJd(...args);
+}
+
+export async function deleteJob(...args: Parameters<typeof local.deleteJob>) {
+  return api().deleteJob(...args);
+}
