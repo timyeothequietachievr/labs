@@ -5,11 +5,19 @@
  */
 export type JobDiscoverySource = {
   id: string;
-  kind: "trueup" | "linkedin_public" | "slack_channel" | "career_site" | "other";
+  kind:
+    | "trueup"
+    | "linkedin_public"
+    | "linkedin_person_feed"
+    | "slack_channel"
+    | "career_site"
+    | "other";
   label: string;
   community?: string;
   /** Slack channel ID (C…) when kind is slack_channel */
   channelId?: string;
+  /** Person name when kind is linkedin_person_feed */
+  personName?: string;
   url?: string;
   notes?: string;
   priority: number;
@@ -60,6 +68,16 @@ export const JOB_DISCOVERY_SOURCES: JobDiscoverySource[] = [
     url: "https://aussiedesigners.slack.com/archives/C2B39S1K3",
     priority: 3,
     notes: "AU design roles. Separate Slack workspace from Leading Design.",
+  },
+  {
+    id: "linkedin-jcolman",
+    kind: "linkedin_person_feed",
+    label: "Jonathan Coleman — LinkedIn posts",
+    personName: "Jonathan Coleman",
+    url: "https://www.linkedin.com/in/jcolman/",
+    priority: 4,
+    notes:
+      "Follow profile + recent posts for content designer / content writer openings he shares. Public/profile surfaces only — never Tim Yeo’s LinkedIn login. Prefer Content Designer, Content Writer, UX Writer, Content Design Lead/Manager roles.",
   },
 ];
 

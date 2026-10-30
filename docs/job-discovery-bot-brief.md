@@ -97,10 +97,14 @@ Prefer the live list from `GET /api/job-search/discovery-criteria` → `sources`
    - Leading Design `#jobs-leadership` — https://leadingdesign.slack.com/archives/C4G08N8DN (`C4G08N8DN`)
    - Leading Design `#jobs-ic` — https://leadingdesign.slack.com/archives/CT8EQSMD3 (`CT8EQSMD3`)
    - Aussie Designers `#jobs` — https://aussiedesigners.slack.com/archives/C2B39S1K3 (`C2B39S1K3`)
-4. Company career sites / ATS when Tim provides targets  
-5. Manual URLs Tim pastes  
+4. **LinkedIn people feeds** (public / profile posts only — never Tim’s LinkedIn login):
+   - Jonathan Coleman — https://www.linkedin.com/in/jcolman/ — he often shares **content designer / content writer** roles; scan recent posts for openings
+5. Company career sites / ATS when Tim provides targets  
+6. Manual URLs Tim pastes  
 
 For Slack posts: extract title, company, location, link, and a short JD/snippet. Set `source` to `leadingdesign_jobs_leadership`, `leadingdesign_jobs_ic`, or `aussiedesigners_jobs`. Skip discussion-only threads with no open role.
+
+For Jonathan Coleman posts: extract each shared job (title, company, location, apply URL, snippet). Set `source` to `linkedin_jcolman`. Skip non-job posts.
 
 ## Output — JSON body for POST /api/job-search/ingest
 
@@ -117,7 +121,7 @@ For Slack posts: extract title, company, location, link, and a short JD/snippet.
       "url": "",
       "snippet_or_jd": "",
       "posted_at": "",
-      "source": "trueup | linkedin_public | linkedin_alert | leadingdesign_jobs_leadership | leadingdesign_jobs_ic | aussiedesigners_jobs | career_site | manual | other",
+      "source": "trueup | linkedin_public | linkedin_alert | linkedin_jcolman | leadingdesign_jobs_leadership | leadingdesign_jobs_ic | aussiedesigners_jobs | career_site | manual | other",
       "external_id": ""
     }
   ]

@@ -24,7 +24,7 @@ The bot does **not** search “for one client only.” It fetches the **union** 
 
 Routine / prompt:
 
-> Run shared job discovery. GET `/api/job-search/discovery-criteria` with the ingest Bearer token. Search every source in the response (TrueUp, LinkedIn without Tim’s login, Leading Design Slack `#jobs-leadership` + `#jobs-ic`, Aussie Designers Slack `#jobs`) across the returned union. POST the JSON to `/api/job-search/ingest`. Report new jobs and matches. No applications, no outreach, no Notion Allocate.
+> Run shared job discovery. GET `/api/job-search/discovery-criteria` with the ingest Bearer token. Search every source in the response (TrueUp, LinkedIn without Tim’s login, Leading Design Slack `#jobs-leadership` + `#jobs-ic`, Aussie Designers Slack `#jobs`, Jonathan Coleman LinkedIn posts for content designer roles) across the returned union. POST the JSON to `/api/job-search/ingest`. Report new jobs and matches. No applications, no outreach, no Notion Allocate.
 
 ### Manual fallback
 
