@@ -1,3 +1,4 @@
+import { listDiscoverySources } from "./sources";
 import { listClients } from "./store";
 import type { Client } from "./types";
 
@@ -45,6 +46,8 @@ export async function buildDiscoveryCriteria() {
     .map((c) => `${c.name}: ${c.brief || c.targetTitles.join(", ")}`)
     .join("\n");
 
+  const sources = listDiscoverySources();
+
   return {
     mode: "shared_union" as const,
     generatedAt: new Date().toISOString(),
@@ -56,11 +59,14 @@ export async function buildDiscoveryCriteria() {
       remoteCountriesAllowed,
       arrangements,
     },
+    sources,
     clients: clientSummaries,
     compositeBrief,
     instructions: [
       "Run ONE shared discovery crawl covering the union above — not a separate crawl per client.",
-      "Prefer TrueUp; LinkedIn jobs only without Tim Yeo’s LinkedIn login.",
+      "Scan every source in `sources` (TrueUp, LinkedIn public/alerts, Slack job boards).",
+      "For Slack channels: read recent posts, extract job openings that match the title/geo union, set source to the channel label (e.g. leadingdesign_jobs_leadership).",
+      "LinkedIn jobs only without Tim Yeo’s LinkedIn login.",
       "After the crawl, POST the JSON payload to /api/job-search/ingest with Authorization: Bearer <JOB_SEARCH_INGEST_TOKEN>.",
       "Do not Allocate to Notion; the coach reviews matches in Web Job Search.",
     ],
