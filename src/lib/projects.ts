@@ -8,6 +8,14 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Career Ops",
+    platform: "Local · CLI agent",
+    description:
+      "Fresh install of the open-source AI job-search agent — evaluate roles against your CV, tailor applications, and track the pipeline on your machine.",
+    href: "https://career-ops.org",
+    hrefLabel: "career-ops.org",
+  },
+  {
     name: "Web Job Search",
     platform: "Web app · Coach",
     description:
